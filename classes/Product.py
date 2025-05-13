@@ -35,7 +35,7 @@ class Product:
         Returns:
             Product: Новый экземпляр класса Product.
         """
-        return cls(*dictionary.values())
+        return cls(**dictionary)
 
     @property
     def price(self) -> float:

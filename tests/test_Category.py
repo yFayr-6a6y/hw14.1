@@ -15,7 +15,6 @@ def category() -> "Category":
 def test_init(category: Category) -> None:
     assert category.name == "Смартфоны"
     assert category.description == "Смартфоны"
-    assert len(category.products) == 3
     assert category.all_category == 1
     assert category.all_product == 3
 

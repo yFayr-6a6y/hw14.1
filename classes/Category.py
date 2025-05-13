@@ -24,7 +24,7 @@ class Category:
         """
         self.name = name
         self.description = description
-        self.products = products
+        self.__products = products
 
         Category.all_category += 1
         Category.all_product += len(products)
