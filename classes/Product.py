@@ -70,7 +70,7 @@ class Product:
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other: "Product") -> float:
-        """Складывает общую стоимость двух продуктов.
+        """Складывает общую стоимость двух продуктов одного класса.
 
         Args:
             other (Product): Другой продукт для сложения.
@@ -79,10 +79,10 @@ class Product:
             float: Сумма стоимости (цена * количество) обоих продуктов.
 
         Raises:
-            TypeError: Если other не является объектом класса Product.
+            TypeError: Если other не является объектом того же класса, что и текущий объект.
         """
-        if not isinstance(other, Product):
-            raise TypeError("Можно складывать только объекты класса Product")
+        if type(self) is not type(other):
+            raise TypeError("Можно складывать только объекты одного класса продуктов")
         return self.__price * self.quantity + other.__price * other.quantity
 
 class Smartphone(Product):

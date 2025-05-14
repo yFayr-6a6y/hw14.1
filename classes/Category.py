@@ -59,7 +59,12 @@ class Category:
         Notes:
             Если продукт уже присутствует, он не добавляется повторно.
             Увеличивает общее количество продуктов (all_product).
+
+        Raises:
+            TypeError: Если переданный объект не является экземпляром Product или его подклассов.
         """
+        if not isinstance(product, Product):
+            raise TypeError("Можно добавлять только объекты класса Product или его подклассов")
         if product not in self.__products:
             self.__products.append(product)
             Category.all_product += 1
