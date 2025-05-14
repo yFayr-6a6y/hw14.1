@@ -53,13 +53,12 @@ class Product:
         Args:
             new_price (float): Новая цена продукта.
 
-        Notes:
-            Если цена <= 0, выводится сообщение об ошибке, и цена не изменяется.
+        Raises:
+            ValueError: Если цена нулевая или отрицательная.
         """
         if new_price <= 0:
-            print("Цена не должна быть нулевая или отрицательная")
-        else:
-            self.__price = new_price
+            raise ValueError("Цена не должна быть нулевая или отрицательная")
+        self.__price = new_price
 
     def __str__(self) -> str:
         """Возвращает строковое представление продукта.

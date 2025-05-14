@@ -1,4 +1,3 @@
-
 import pytest
 
 from classes.Product import Product
@@ -15,6 +14,7 @@ def test_init(product: Product) -> None:
     assert product.price == 180000.0
     assert product.quantity == 5
 
+
 def test_new_product(product: Product) -> None:
     new_dict = {
         "name": "Samsung Galaxy S23 Ultra",
@@ -30,35 +30,34 @@ def test_price(product: Product) -> None:
     assert product.price == 180000.0
     product.price = 50
     assert product.price == 50
-    product.price = -50
-    assert product.price == 50
 
-def test_product_str():
+
+
+def test_product_str() -> None:
     product = Product("Телефон", "Смартфон", 50000.0, 10)
     assert str(product) == "Телефон, 50000.0 руб. Остаток: 10 шт."
 
 
-def test_product_add():
+def test_product_add() -> None:
     product1 = Product("Телефон", "Смартфон", 50000.0, 10)
     product2 = Product("Ноутбук", "Игровой", 100000.0, 5)
     assert product1 + product2 == 50000.0 * 10 + 100000.0 * 5
 
 
-def test_product_add_type_error():
+def test_product_add_type_error() -> None:
     product = Product("Телефон", "Смартфон", 50000.0, 10)
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError, match="Можно складывать только объекты одного класса продуктов"):
         product + "Не продукт"
 
 
-def test_product_price_setter_positive():
+def test_product_price_setter_positive() -> None:
     product = Product("Телефон", "Смартфон", 50000.0, 10)
     product.price = 60000.0
     assert product.price == 60000.0
 
 
-def test_product_price_setter_negative_or_zero():
+def test_product_price_setter_negative_or_zero() -> None:
     product = Product("Телефон", "Смартфон", 50000.0, 10)
     with pytest.raises(ValueError, match="Цена не должна быть нулевая или отрицательная"):
         product.price = -1000.0
     assert product.price == 50000.0
-
