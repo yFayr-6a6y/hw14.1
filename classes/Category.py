@@ -24,10 +24,13 @@ class Category:
         """
         self.name = name
         self.description = description
-        self.__products = products
+        self.__products = []
+
+        for product in products:
+            self.add_product(product)
 
         Category.all_category += 1
-        Category.all_product += len(products)
+
 
     @property
     def products(self) -> str:
@@ -36,10 +39,7 @@ class Category:
         Returns:
             str: Строка с перечислением продуктов в формате "название, цена руб. Остаток: количество шт."
         """
-        count = ""
-        for i in self.__products:
-            count += f"{i.name}, {i.price} руб. Остаток: {i.quantity} шт. "
-        return count
+        return "\n".join(str(product) for product in self.__products)
 
     @products.setter
     def products(self, value: list) -> None:
@@ -77,3 +77,20 @@ class Category:
         """
         total_quantity = sum(product.quantity for product in self.__products)
         return f"{self.name}, количество продуктов: {total_quantity} шт."
+
+    def average_price(self) -> float:
+
+        """Метод расчета средней цены товаров в категории"""
+
+        if not self.__products:
+            return 0
+
+        try:
+
+            total = sum(product.price for product in self.__products)
+
+            return total / len(self.__products)
+
+        except ZeroDivisionError:
+
+            return 0

@@ -1,6 +1,7 @@
 import pytest
 
 from classes.Product import Product
+from classes.Category import Category
 
 
 @pytest.fixture
@@ -61,3 +62,41 @@ def test_product_price_setter_negative_or_zero() -> None:
     with pytest.raises(ValueError, match="Цена не должна быть нулевая или отрицательная"):
         product.price = -1000.0
     assert product.price == 50000.0
+
+def test_product_zero_quantity():
+
+    """Тест создания продукта с нулевым количеством"""
+
+    with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен"):
+
+        Product("Тест", "Тест", 100, 0)
+
+def test_category_average_price():
+
+    """Тест расчета средней цены категории"""
+
+    # Случай с товарами
+    p1 = Product("Товар 1", "Описание", 100, 10)
+    p2 = Product("Товар 2", "Описание", 200, 5)
+    cat = Category("Категория", "Описание", [p1, p2])
+    assert cat.average_price() == 150.0
+
+    # Случай без товаров
+    empty_cat = Category("Пустая", "Описание", [])
+    assert empty_cat.average_price() == 0
+
+    # Случай с нулевой ценой
+    p3 = Product("Товар 3", "Описание", 0, 1)
+    cat_with_zero = Category("С нулем", "Описание", [p3])
+    assert cat_with_zero.average_price() == 0
+
+
+def test_add_product_with_zero_quantity():
+    """Тест добавления продукта с нулевым количеством через new_product"""
+    with pytest.raises(ValueError):
+        Product.new_product({
+            "name": "Тест",
+            "description": "Тест",
+            "price": 100,
+            "quantity": 0
+        })

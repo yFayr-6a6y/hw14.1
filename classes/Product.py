@@ -58,6 +58,8 @@ class Product(BaseProduct, ReprLoggingMixin):
     """Класс продукта с наследованием от BaseProduct и миксина"""
 
     def __init__(self, name: str, description: str, price: float, quantity: int):
+        if quantity == 0:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
         super().__init__(
             name=name,
             description=description,
