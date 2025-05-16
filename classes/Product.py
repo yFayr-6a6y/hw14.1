@@ -1,41 +1,73 @@
-class Product:
-    """Описание продукта.
+from abc import ABC, abstractmethod
 
-    Класс представляет продукт с его названием, описанием, ценой и количеством.
-    Поддерживает операции сложения для подсчёта общей стоимости и управление ценой через свойство.
+class ReprLoggingMixin:
+    """
+    Миксин для логирования создания объектов и представления
+    Реализует магический метод __repr__ и расширяет __init__
     """
 
-    name: str
-    description: str
-    price: float
-    quantity: int
-
-    def __init__(self, name: str, description: str, price: float, quantity: int):
-        """Инициализирует новый продукт.
-
-        Args:
-            name (str): Название продукта.
-            description (str): Описание продукта.
-            price (float): Цена продукта (должна быть положительной).
-            quantity (int): Количество продукта на складе.
+    def __init__(self, *args, **kwargs):
         """
+        Расширяет конструктор базового класса логированием параметров создания
+        """
+        print(f"Создание объекта {self.__class__.__name__} с параметрами:")
+        for name, value in kwargs.items():
+            print(f"  {name}: {value}")
+
+        super().__init__(*args, **kwargs)
+
+    def __repr__(self) -> str:
+        """
+        Стандартное представление объекта для разработчика
+        Формат: <ClassName(arg1=value1, arg2=value2)>
+        """
+        args_str = ', '.join(f"{k}={v!r}" for k, v in self.__dict__.items())
+        return f"<{self.__class__.__name__}({args_str})>"
+
+
+class BaseProduct(ABC):
+    """Абстрактный базовый класс для продуктов"""
+
+    @abstractmethod
+    def __init__(self, name: str, description: str, price: float, quantity: int):
         self.name = name
         self.description = description
-        self.__price = price
+        self._price = price
         self.quantity = quantity
 
-    @classmethod
-    def new_product(cls, dictionary: dict) -> "Product":
-        """Создаёт новый продукт из словаря.
+    @abstractmethod
+    def __str__(self):
+        pass
 
-        Args:
-            dictionary (dict): Словарь с ключами, соответствующими параметрам продукта
-                             (name, description, price, quantity).
+    @property
+    @abstractmethod
+    def price(self):
+        pass
 
-        Returns:
-            Product: Новый экземпляр класса Product.
-        """
-        return cls(**dictionary)
+    @price.setter
+    @abstractmethod
+    def price(self, new_price):
+        pass
+
+    @abstractmethod
+    def __add__(self, other):
+        pass
+
+
+class Product(BaseProduct, ReprLoggingMixin):
+    """Класс продукта с наследованием от BaseProduct и миксина"""
+
+    def __init__(self, name: str, description: str, price: float, quantity: int):
+        super().__init__(
+            name=name,
+            description=description,
+            price=price,
+            quantity=quantity
+        )
+
+    def __str__(self) -> str:
+        return f"{self.name}, {self._price} руб. Остаток: {self.quantity} шт."
+
 
     @property
     def price(self) -> float:
@@ -44,7 +76,7 @@ class Product:
         Returns:
             float: Текущая цена продукта.
         """
-        return self.__price
+        return self._price
 
     @price.setter
     def price(self, new_price: float) -> None:
@@ -58,15 +90,8 @@ class Product:
         """
         if new_price <= 0:
             raise ValueError("Цена не должна быть нулевая или отрицательная")
-        self.__price = new_price
+        self._price = new_price
 
-    def __str__(self) -> str:
-        """Возвращает строковое представление продукта.
-
-        Returns:
-            str: Строка в формате "название, цена руб. Остаток: количество шт."
-        """
-        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other: "Product") -> float:
         """Складывает общую стоимость двух продуктов одного класса.
@@ -82,12 +107,21 @@ class Product:
         """
         if type(self) is not type(other):
             raise TypeError("Можно складывать только объекты одного класса продуктов")
-        return self.__price * self.quantity + other.__price * other.quantity
+        return self._price * self.quantity + other._price * other.quantity
+
+    @classmethod
+    def new_product(cls, dictionary: dict) -> "Product":
+        return cls(**dictionary)
 
 class Smartphone(Product):
     def __init__(self, name: str, description: str, price: float, quantity: int,
                  efficiency: float, model: str, memory: int, color: str):
-        super().__init__(name, description, price, quantity)
+        super().__init__(
+            name=name,
+            description=description,
+            price=price,
+            quantity=quantity
+        )
         self.efficiency = efficiency
         self.model = model
         self.memory = memory
@@ -96,7 +130,12 @@ class Smartphone(Product):
 class LawnGrass(Product):
     def __init__(self, name: str, description: str, price: float, quantity: int,
                  country: str, germination_period: int, color: str):
-        super().__init__(name, description, price, quantity)
+        super().__init__(
+            name=name,
+            description=description,
+            price=price,
+            quantity=quantity
+        )
         self.country = country
         self.germination_period = germination_period
         self.color = color

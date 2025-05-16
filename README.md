@@ -51,6 +51,11 @@
 
 - Обновление `Category.py` и `Product.py`
 
+
+- Добавлен абстрактный базовый класс `BaseProduct`
+- Реализован миксин `LogCreationMixin` для логирования создания объектов
+- Все классы продуктов теперь наследуются от `BaseProduct`
+
 Пример:
 ```python
 from classes.Product import Product
