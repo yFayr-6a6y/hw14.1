@@ -68,3 +68,6 @@ category.add_product(Product("Samsung Galaxy", "256GB", 90000.0, 2))
 
 # Вывод информации
 print(category)  # Электроника, количество продуктов: 10 шт.
+
+# Вывод покрытии тестами
+pytest --cov --cov-report html
