@@ -81,3 +81,9 @@ def test_category_counters() -> None:
 
     assert Category.all_category == initial_category_count + 1
     assert Category.all_product == initial_product_count + 2
+
+def test_average_price_empty() -> None:
+    Category.all_category = 0
+    Category.all_product = 0
+    category = Category("Пустая", "Нет товаров", [])
+    assert category.average_price() == 0

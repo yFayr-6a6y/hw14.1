@@ -34,6 +34,8 @@ class BaseProduct(ABC):
         self.description = description
         self._price = price
         self.quantity = quantity
+        if quantity == 0:
+            raise ValueError("Количество товара не может быть равно нулю")
 
     @abstractmethod
     def __str__(self):
