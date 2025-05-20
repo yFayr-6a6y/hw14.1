@@ -23,10 +23,12 @@ def test_init(category: Category) -> None:
 
 
 def test_products(category: Category) -> None:
-    assert category.products == (
-        "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт. Iphone 15, 210000.0 "
-        "руб. Остаток: 8 шт. Xiaomi Redmi Note 11, 31000.0 руб. Остаток: 14 шт. "
+    expected = (
+        "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт.\n"
+        "Iphone 15, 210000.0 руб. Остаток: 8 шт.\n"
+        "Xiaomi Redmi Note 11, 31000.0 руб. Остаток: 14 шт."
     )
+    assert category.products == expected
 
 
 def test_add_product(category: Category) -> None:
@@ -52,7 +54,10 @@ def test_category_products_property() -> None:
     product1 = Product("Телефон", "Смартфон", 50000.0, 10)
     product2 = Product("Ноутбук", "Игровой", 100000.0, 5)
     category = Category("Электроника", "Техника", [product1, product2])
-    expected_output = "Телефон, 50000.0 руб. Остаток: 10 шт. Ноутбук, 100000.0 руб. Остаток: 5 шт. "
+    expected_output = (
+        "Телефон, 50000.0 руб. Остаток: 10 шт.\n"
+        "Ноутбук, 100000.0 руб. Остаток: 5 шт."
+    )
     assert category.products == expected_output
 
 
@@ -81,6 +86,7 @@ def test_category_counters() -> None:
 
     assert Category.all_category == initial_category_count + 1
     assert Category.all_product == initial_product_count + 2
+
 
 def test_average_price_empty() -> None:
     Category.all_category = 0

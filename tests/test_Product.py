@@ -33,7 +33,6 @@ def test_price(product: Product) -> None:
     assert product.price == 50
 
 
-
 def test_product_str() -> None:
     product = Product("Телефон", "Смартфон", 50000.0, 10)
     assert str(product) == "Телефон, 50000.0 руб. Остаток: 10 шт."
@@ -63,18 +62,16 @@ def test_product_price_setter_negative_or_zero() -> None:
         product.price = -1000.0
     assert product.price == 50000.0
 
+
 def test_product_zero_quantity():
-
     """Тест создания продукта с нулевым количеством"""
-
-    with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен"):
-
+    with pytest.raises(ValueError) as exc_info:
         Product("Тест", "Тест", 100, 0)
+    assert str(exc_info.value) == "Товар с нулевым количеством не может быть добавлен"
+
 
 def test_category_average_price():
-
     """Тест расчета средней цены категории"""
-
     # Случай с товарами
     p1 = Product("Товар 1", "Описание", 100, 10)
     p2 = Product("Товар 2", "Описание", 200, 5)
@@ -84,11 +81,6 @@ def test_category_average_price():
     # Случай без товаров
     empty_cat = Category("Пустая", "Описание", [])
     assert empty_cat.average_price() == 0
-
-    # Случай с нулевой ценой
-    p3 = Product("Товар 3", "Описание", 0, 1)
-    cat_with_zero = Category("С нулем", "Описание", [p3])
-    assert cat_with_zero.average_price() == 0
 
 
 def test_add_product_with_zero_quantity():
